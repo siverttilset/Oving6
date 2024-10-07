@@ -31,7 +31,16 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.csv', mode='r', encodin
         sola_pressures.append(pressure)
 
 # Print some values to verify
+<<<<<<< Updated upstream
 print(sola_dates[:5], sola_temperatures[:5], sola_pressures[:5])
+=======
+print(sola_dates[:2], sola_temperatures[:2], sola_pressures[:2])
+print(sola_dates)
+print(sola_pressures)
+print(sola_temperatures)
+
+
+>>>>>>> Stashed changes
 
 
 
