@@ -32,7 +32,7 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.txt', mode='r', encodin
         sola_pressures.append(pressure)
 
 # Print some values to verify
-print(sola_dates[:1], sola_temperatures[:1], sola_pressures[:1])
+print(sola_dates[:4], sola_temperatures[:4], sola_pressures[:4])
 
 
 
