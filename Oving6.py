@@ -40,6 +40,7 @@ print(sola_dates[:2], sola_temperatures[:2], sola_pressures[:2])
 #print(header)
 
 
+Oppdatering!!!!!
 
 
 
