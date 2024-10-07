@@ -1,3 +1,12 @@
+
+
+
+# Her fungerer koden, alle datoer er lagt til i hver sin liste. I tillegg er datoene nå skrevet på lik form
+
+
+
+
+
 import csv
 from datetime import datetime
 date_sola=[]
