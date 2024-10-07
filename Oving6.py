@@ -13,9 +13,15 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.txt', mode='r', encodin
     reader = csv.reader(file, delimiter=';')
     next(reader)  # Skip header
     for row in reader:
+        name_str = row[0]    #navn
+        station = row[1]    #station
         date_str = row[2]  # Date and time
-        temperature = float(row[4].replace(',', '.'))  # Temperature
-        pressure = float(row[5].replace(',', '.'))  # Pressure
+        temperature = float(row[3].replace(',', '\t'))  # Temperature
+        pressure = float(row[4].replace(',', '\t'))  # Pressure
+        #if len(row) < 6:  # Check if the row has at least 6 columns
+        #    continue  # Skip the row if it doesn't
+        # Further processing here
+
         
         # Parse the date and time
         date_time = datetime.strptime(date_str, '%d.%m.%Y %H:%M')
@@ -24,7 +30,10 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.txt', mode='r', encodin
         sola_pressures.append(pressure)
 
 # Print some values to verify
-print(sola_dates[:5], sola_temperatures[:5], sola_pressures[:5])
+print(sola_dates[2], sola_temperatures[2], sola_pressures[2])
+print(sola_dates)
+print(sola_pressures)
+print(sola_temperatures)
 
 
 
@@ -37,20 +46,3 @@ print(sola_dates[:5], sola_temperatures[:5], sola_pressures[:5])
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-tester23213213213
-tester 
