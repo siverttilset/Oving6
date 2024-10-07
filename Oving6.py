@@ -1,3 +1,5 @@
+
+
 import csv
 from datetime import datetime
 
@@ -36,3 +38,14 @@ print(sola_dates[:2], sola_temperatures[:2], sola_pressures[:2])
 #print(sola_pressures)
 #print(sola_temperatures)
 #print(header)
+
+
+
+
+
+
+
+
+
+
+
