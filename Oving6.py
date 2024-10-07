@@ -13,7 +13,7 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.txt', mode='r', encodin
     reader = csv.reader(file, delimiter=';')
     next(reader)  # Skip header
     for row in reader:
-        name_str = row[0]    #navn
+        name_str = [0]    #navn
         station = row[1]    #station
         date_str = row[2]  # Date and time
         temperature = float(row[3].replace(',', '\t'))  # Temperature
@@ -30,7 +30,7 @@ with open('temperatur_trykk_met_samme_rune_time_datasett.txt', mode='r', encodin
         sola_pressures.append(pressure)
 
 # Print some values to verify
-print(sola_dates[2], sola_temperatures[2], sola_pressures[2])
+print(sola_dates[:2], sola_temperatures[:2], sola_pressures[:2])
 print(sola_dates)
 print(sola_pressures)
 print(sola_temperatures)
