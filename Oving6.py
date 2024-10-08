@@ -1,11 +1,5 @@
 
-
-
 # Her fungerer koden, alle datoer er lagt til i hver sin liste. I tillegg er datoene nå skrevet på lik form
-
-
-
-
 
 import csv
 from datetime import datetime
@@ -16,12 +10,10 @@ time_siden_start1=[]
 dag_gokk=[]
 minutt_gokk=[]
 sekund_gokk=[]
-
 date_gokk=[]
 temp_gokk=[]
 pressure_gokk=[]
 time_since_start2=[]
-
 
 def convert_to_days(dag_snart):
     dag_gokk=time_siden_start1/60
@@ -44,10 +36,6 @@ def convert_date_format(date_str):
             #print(f"Date format issue with: {date_str}")
             return date_str
 
-
-
-
-
 def open_file1():
     with open('temperatur_trykk_met_samme_rune_time_datasett.csv',mode='r',encoding='utf-8') as file1:
         reader=csv.reader(file1, delimiter=';')
@@ -68,8 +56,6 @@ def open_file1():
             temp_sola.append(temp1)
             pressure_sola.append(pressure1)
         
-        
-
 def open_file2():
     with open('trykk_og_temperaturlogg_rune_time.csv', mode='r', encoding='utf-8') as file2:
         reader2 = csv.reader(file2, delimiter=';')
@@ -94,14 +80,8 @@ def open_file2():
             pressure_gokk.append(float(pressure2))
             time_since_start2.append(float(time_siden_start2))
 
-        
-        
-
-
 open_file1()
 open_file2()
-
-
 
 print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:10])
 print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
