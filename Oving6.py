@@ -3,6 +3,7 @@
 
 import csv
 from datetime import datetime
+import matplotlib
 date_sola=[]
 temp_sola=[]
 pressure_sola=[]
@@ -47,9 +48,6 @@ def open_file1():
             date1=row[date_index1].strip()
             temp1 = row[temp_index1].replace(',', '.')
             pressure1 = row[pressure_index1].replace(',', '.')
-
-            
-
             #####if date1 is None:
             #####    continue
             date_sola.append(date1)
@@ -83,7 +81,12 @@ def open_file2():
 open_file1()
 open_file2()
 
-print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:10])
-print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
-print('sola,',len(date_sola))
-print('gokk', len(date_gokk))
+#print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:10])
+#print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
+#print('sola,',len(date_sola))
+#print('gokk', len(date_gokk))
+
+# linje 1130-2 er 17:31 11 juni klokkelsett i fil 2
+# linje 4572-2 er 03:05 12 juni i fil 2
+
+print('file2', temp_gokk[1128] )
