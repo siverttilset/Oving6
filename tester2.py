@@ -87,3 +87,4 @@ print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
 print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
 print('sola,', len(date_sola))
 print('gokk', len(date_gokk))
+#3
