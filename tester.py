@@ -1,6 +1,8 @@
 import csv
 from datetime import datetime
+import numpy
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 date_sola = []
 temp_sola = []
@@ -80,6 +82,7 @@ plt.title('Temperatur med Glattet Gjennomsnitt')
 plt.legend()
 plt.xticks(rotation=45)
 plt.tight_layout()
+
 plt.show()
 
 print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
