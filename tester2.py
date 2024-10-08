@@ -23,6 +23,7 @@ def plot():
     plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
     plt.plot(x_verdierp, y_verdierp,label=f'Temperaturfall maksimal til minimal',color='purple')
     plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+    plt.plot(date_sola, temp_sola, label=f'Temperatur MET', color='green')
     plt.xlabel('Tid')
     plt.ylabel('Temperatur (°C)')
     plt.title('Temperatur med Glattet Gjennomsnitt')
