@@ -21,14 +21,7 @@ date_gokk=[]
 temp_gokk=[]
 pressure_gokk=[]
 time_since_start2=[]
-
-
-def convert_to_days(dag_snart):
-    
-    for i in len(date_gokk):
-        tid_minutter=time_siden_start2/60
-
-        
+       
 
 def convert_date_format(date_str):
     """Converts different date formats to DD.MM.YYYY HH:MM."""
@@ -87,7 +80,7 @@ def open_file2():
             temp2 = row[temp_index2].replace(',', '.')
             pressure2 = row[pressure_index2].replace(',', '.')
             time_siden_start2=row[time_since_start_index2].strip()
-            tid_minutter=time_siden_start2/6
+            
 
             # Convert the date format using the function
             date2 = convert_date_format(date2)
@@ -108,7 +101,7 @@ open_file2()
 
 
 
-print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:2])
+print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:4])
 print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
 print('sola,',len(date_sola))
 print('gokk', len(date_gokk))

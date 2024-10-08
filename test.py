@@ -16,22 +16,20 @@ pressure_gokk=[]
 
 
 def convert_date_format(date_str):
-    """Converts different date formats to DD.MM.YYYY HH:MM."""
+    """Converts different date formats to DAYS.HOURS.MINUTES."""
     try:
-        # First, try parsing with the DD.MM.YYYY HH:MM format
+        # First, try parsing with the MM.DD.YYYY HH:MM format
         date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
-        # If it succeeds, the date is already in the correct format
-        return date_time.strftime('%d. %H:%M')
+        return f"{date_time.day}.{date_time.hour}.{date_time.minute}"
     except ValueError:
         try:
             # Try parsing with the MM/DD/YYYY hh:mm:ss AM/PM format
             date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
-            # Convert it to DD.MM.YYYY HH:MM format (24-hour format)
-            return date_time.strftime('%d. %H:%M')
+            return f"{date_time.day}.{date_time.hour}.{date_time.minute}"
         except ValueError:
             # If neither format works, print an error and return the original date string
-            #print(f"Date format issue with: {date_str}")
-            return date_str
+            print(f"Date format issue with: {date_str}")
+            return None
     
 
 
@@ -52,8 +50,12 @@ def open_file1():
 
             
 
-            #####if date1 is None:
-            #####    continue
+            # Convert the date format using the function
+            date1 = convert_date_format(date1)
+            if date1 is None:
+                continue
+
+
             date_sola.append(date1)
             temp_sola.append(temp1)
             pressure_sola.append(pressure1)
