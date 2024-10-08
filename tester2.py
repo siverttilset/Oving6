@@ -13,11 +13,11 @@ pressure_gokk = []
 
 def plot():
     n = 30
+    smoothed_dates, smoothed_temps = gjennomsnitts_utregning(date_gokk, temp_gokk, n)
     punkt1= [date_gokk[1128],temp_gokk[1128]]
     punkt2= [date_gokk[4570],temp_gokk[4570]]
     x_verdierp = [punkt1[0], punkt2[0]]
     y_verdierp = [punkt1[1], punkt2[1]]
-    smoothed_dates, smoothed_temps = smooth_temperature(date_gokk, temp_gokk, n)
 
     
     plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
@@ -90,17 +90,24 @@ def open_file2():
             temp_gokk.append(float(temp2))
             pressure_gokk.append(float(pressure2))
 
-def smooth_temperature(dates, temperatures, n):
-    smoothed_dates = []
-    smoothed_temps = []
-    if len(dates) != len(temperatures):
-        raise ValueError("Listene for tidspunkter og temperaturer må ha samme lengde.")
-    for i in range(n, len(temperatures) - n):
-        window = temperatures[i - n:i + n + 1]
-        avg_temp = sum(window) / len(window)
-        smoothed_dates.append(dates[i])
-        smoothed_temps.append(avg_temp)
-    return smoothed_dates, smoothed_temps
+
+def gjennomsnitts_utregning(tider:list, temperatur:list, gjennomsnittsverdi:int):
+    gjennomsnitts_liste_temperatur = []
+    gyldige_tidspunkter = []
+    lengde_templiste = len(temperatur)
+    for x,i in enumerate(tider):
+        if x >= gjennomsnittsverdi and x < lengde_templiste-gjennomsnittsverdi:
+            sum_temp = 0
+            for v in range(-gjennomsnittsverdi, gjennomsnittsverdi+1, 1):
+                sum_temp += float(temperatur[x+v])
+            gjennomsnitts_liste_temperatur.append(float(f'{sum_temp/((gjennomsnittsverdi*2)+1):.2f}'))
+            gyldige_tidspunkter.append(i)
+        else:                                                       ##### Disse 3 linjene kan fjernes hvis vi KUN skal ha med
+            gjennomsnitts_liste_temperatur.append(temperatur[x])    ##### "gyldige" verdier med gjennomsnitt. Da vil de n første
+            gyldige_tidspunkter.append(tider[x])                    ##### og n siste verdiene ikke returneres i det hele tatt
+
+
+    return gyldige_tidspunkter, gjennomsnitts_liste_temperatur
 
 open_file1()
 open_file2()
