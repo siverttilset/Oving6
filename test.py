@@ -12,26 +12,18 @@ from datetime import datetime
 date_sola=[]
 temp_sola=[]
 pressure_sola=[]
-time_siden_start1=[]
-dag_gokk=[]
-minutt_gokk=[]
-sekund_gokk=[]
 
 date_gokk=[]
 temp_gokk=[]
 pressure_gokk=[]
-time_since_start2=[]
 
-
-def convert_to_days(dag_snart):
-    dag_gokk=time_siden_start1/60
 
 def convert_date_format(date_str):
     """Converts different date formats to DD.MM.YYYY HH:MM."""
     try:
-        # First, try parsing with the MM.DD.YYYY HH:MM format
+        # First, try parsing with the DD.MM.YYYY HH:MM format
         date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
-        # If it succeeds, the date is now in the correct format
+        # If it succeeds, the date is already in the correct format
         return date_time.strftime('%d.%m.%Y %H:%M')
     except ValueError:
         try:
@@ -43,6 +35,7 @@ def convert_date_format(date_str):
             # If neither format works, print an error and return the original date string
             #print(f"Date format issue with: {date_str}")
             return date_str
+    
 
 
 
@@ -77,22 +70,19 @@ def open_file2():
         date_index2 = header2.index('Dato og tid')
         temp_index2 = header2.index('Temperatur (gr Celsius)')
         pressure_index2 = header2.index('Trykk - absolutt trykk maaler (bar)')
-        time_since_start_index2 = header2.index('Tid siden start (sek)')
         for row in reader2:
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
             pressure2 = row[pressure_index2].replace(',', '.')
-            time_siden_start2=row[time_since_start_index2].strip()
 
             # Convert the date format using the function
-            #date2 = convert_date_format(date2)
-            #if date2 is None:
-            #    continue
+            date2 = convert_date_format(date2)
+            if date2 is None:
+                continue
 
             date_gokk.append(date2)
             temp_gokk.append(float(temp2))
             pressure_gokk.append(float(pressure2))
-            time_since_start2.append(float(time_siden_start2))
 
         
         
@@ -103,7 +93,7 @@ open_file2()
 
 
 
-print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2], time_since_start2[:10])
+print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2])
 print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
 print('sola,',len(date_sola))
 print('gokk', len(date_gokk))
