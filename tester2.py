@@ -10,6 +10,8 @@ date_gokk = []
 temp_gokk = []
 pressure_gokk = []
 
+trykk_absolutt = []
+
 
 def plot():
     n = 30
@@ -18,19 +20,26 @@ def plot():
     punkt2= [date_gokk[4570],temp_gokk[4570]]
     x_verdierp = [punkt1[0], punkt2[0]]
     y_verdierp = [punkt1[1], punkt2[1]]
+    
+    fig,ax = plt.subplots(2,1)
+    temp = ax[0]
+    trykk = ax[1]
+    
+    temp.plot(date_gokk, temp_gokk, label='Original Temperatur')
+    temp.plot(x_verdierp, y_verdierp,label=f'Temperaturfall maksimal til minimal',color='purple')
+    temp.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+    temp.plot(date_sola, temp_sola, label=f'Temperatur MET', color='green')
+    #plt.xlabel('Tid') 
+    #plt.ylabel('Temperatur (°C)')
+    #temp.title('Temperatur med Glattet Gjennomsnitt')
+    temp.legend()
+
+    trykk.plot()
 
     
-    plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
-    plt.plot(x_verdierp, y_verdierp,label=f'Temperaturfall maksimal til minimal',color='purple')
-    plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
-    plt.plot(date_sola, temp_sola, label=f'Temperatur MET', color='green')
-    plt.xlabel('Tid')
-    plt.ylabel('Temperatur (°C)')
-    plt.title('Temperatur med Glattet Gjennomsnitt')
-    plt.legend()
 
     #plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
-    plt.tight_layout()
+    #temp.tight_layout()
     plt.show()
 
 
@@ -79,11 +88,13 @@ def open_file2():
         header2 = next(reader2)
         date_index2 = header2.index('Dato og tid')
         temp_index2 = header2.index('Temperatur (gr Celsius)')
-        pressure_index2 = header2.index('Trykk - absolutt trykk maaler (bar)')
+        absolutt_trykk_index = header2.index('Trykk - absolutt trykk maaler (bar)')
+
         for row in reader2:
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
-            pressure2 = row[pressure_index2].replace(',', '.')
+            pressure2 = row[absolutt_trykk_index].replace(',', '.')
+            abs_trykk2 = row[absolutt_trykk_index].replace(',','.')
             date2 = convert_date_format(date2, False)
             if date2 is None:
                 continue
