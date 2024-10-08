@@ -38,13 +38,13 @@ def plot():
 def convert_date_format(date_str):
     try:
         date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
-        return date_time
+        return date_time.strftime('%d.%m.%Y %H:%M')
     except ValueError:
         try:
             date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
-            return date_time
+            return date_time.strftime('%d.%m.%Y %H:%M')
         except ValueError:
-            return None
+            return date_str
 
 def open_file1():
     with open('temperatur_trykk_met_samme_rune_time_datasett.csv', mode='r', encoding='utf-8') as file1:
