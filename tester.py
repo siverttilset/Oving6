@@ -1,69 +1,40 @@
-
-
-
-# Her fungerer koden, alle datoer er lagt til i hver sin liste. I tillegg er datoene nå skrevet på lik form
-
-
-
-
-
 import csv
 from datetime import datetime
-date_sola=[]
-temp_sola=[]
-pressure_sola=[]
+import matplotlib.pyplot as plt
 
-date_gokk=[]
-temp_gokk=[]
-pressure_gokk=[]
+date_sola = []
+temp_sola = []
+pressure_sola = []
 
+date_gokk = []
+temp_gokk = []
+pressure_gokk = []
 
 def convert_date_format(date_str):
-    """Converts different date formats to DAYS.HOURS.MINUTES."""
     try:
-        # First, try parsing with the MM.DD.YYYY HH:MM format
         date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
-        return f"{date_time.day}.{date_time.hour}.{date_time.minute}"
+        return date_time.strftime('%d.%m.%Y %H:%M')
     except ValueError:
         try:
-            # Try parsing with the MM/DD/YYYY hh:mm:ss AM/PM format
             date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
-            return f"{date_time.day}.{date_time.hour}.{date_time.minute}"
+            return date_time.strftime('%d.%m.%Y %H:%M')
         except ValueError:
-            # If neither format works, print an error and return the original date string
-            print(f"Date format issue with: {date_str}")
-            return None
-    
-
-
-
-
+            return date_str
 
 def open_file1():
-    with open('temperatur_trykk_met_samme_rune_time_datasett.csv',mode='r',encoding='utf-8') as file1:
-        reader=csv.reader(file1, delimiter=';')
-        header=next(reader)
+    with open('temperatur_trykk_met_samme_rune_time_datasett.csv', mode='r', encoding='utf-8') as file1:
+        reader = csv.reader(file1, delimiter=';')
+        header = next(reader)
         date_index1 = header.index('Tid(norsk normaltid)')
         temp_index1 = header.index('Lufttemperatur')
         pressure_index1 = header.index('Lufttrykk i havnivå')
         for row in reader:
-            date1=row[date_index1].strip()
+            date1 = row[date_index1].strip()
             temp1 = row[temp_index1].replace(',', '.')
             pressure1 = row[pressure_index1].replace(',', '.')
-
-            
-
-            # Convert the date format using the function
-            date1 = convert_date_format(date1)
-            if date1 is None:
-                continue
-
-
             date_sola.append(date1)
             temp_sola.append(temp1)
             pressure_sola.append(pressure1)
-        
-        
 
 def open_file2():
     with open('trykk_og_temperaturlogg_rune_time.csv', mode='r', encoding='utf-8') as file2:
@@ -76,26 +47,42 @@ def open_file2():
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
             pressure2 = row[pressure_index2].replace(',', '.')
-
-            # Convert the date format using the function
             date2 = convert_date_format(date2)
             if date2 is None:
                 continue
-
             date_gokk.append(date2)
             temp_gokk.append(float(temp2))
             pressure_gokk.append(float(pressure2))
 
-        
-        
-
+def smooth_temperature(dates, temperatures, n):
+    smoothed_dates = []
+    smoothed_temps = []
+    if len(dates) != len(temperatures):
+        raise ValueError("Listene for tidspunkter og temperaturer må ha samme lengde.")
+    for i in range(n, len(temperatures) - n):
+        window = temperatures[i - n:i + n + 1]
+        avg_temp = sum(window) / len(window)
+        smoothed_dates.append(dates[i])
+        smoothed_temps.append(avg_temp)
+    return smoothed_dates, smoothed_temps
 
 open_file1()
 open_file2()
 
+n = 30
+smoothed_dates, smoothed_temps = smooth_temperature(date_gokk, temp_gokk, n)
 
+plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
+plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+plt.xlabel('Tid')
+plt.ylabel('Temperatur (°C)')
+plt.title('Temperatur med Glattet Gjennomsnitt')
+plt.legend()
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
 
-print('file1',date_sola[:2], temp_sola[:2], pressure_sola[:2])
-print('file2',date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
-print('sola,',len(date_sola))
+print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
+print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
+print('sola,', len(date_sola))
 print('gokk', len(date_gokk))
