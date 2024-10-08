@@ -10,6 +10,27 @@ date_gokk = []
 temp_gokk = []
 pressure_gokk = []
 
+
+def plot():
+    n = 30
+    smoothed_dates, smoothed_temps = smooth_temperature(date_gokk, temp_gokk, n)
+
+    plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
+    plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+    plt.xlabel('Tid')
+    plt.ylabel('Temperatur (°C)')
+    plt.title('Temperatur med Glattet Gjennomsnitt')
+    plt.legend()
+
+    plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
+    plt.tight_layout()
+    plt.show()
+
+    print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
+    print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
+    print('sola,', len(date_sola))
+    print('gokk', len(date_gokk))
+
 def convert_date_format(date_str):
     try:
         date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
@@ -68,23 +89,4 @@ def smooth_temperature(dates, temperatures, n):
 
 open_file1()
 open_file2()
-
-n = 30
-smoothed_dates, smoothed_temps = smooth_temperature(date_gokk, temp_gokk, n)
-
-plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
-plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
-plt.xlabel('Tid')
-plt.ylabel('Temperatur (°C)')
-plt.title('Temperatur med Glattet Gjennomsnitt')
-plt.legend()
-
-plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
-plt.tight_layout()
-plt.show()
-
-print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
-print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
-print('sola,', len(date_sola))
-print('gokk', len(date_gokk))
-#3
+plot()
