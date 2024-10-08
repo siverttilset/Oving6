@@ -1,54 +1,45 @@
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.ticker
 
 date_sola = []
 temp_sola = []
-pressure_sola = []
+trykk_sola = []
 
 date_gokk = []
 temp_gokk = []
-pressure_gokk = []
+trykk_gokk = []
 
 trykk_absolutt = []
 
 
 def plot():
-    n = 30
-    smoothed_dates, smoothed_temps = gjennomsnitts_utregning(date_gokk, temp_gokk, n)
-    punkt1= [date_gokk[1128],temp_gokk[1128]]
-    punkt2= [date_gokk[4570],temp_gokk[4570]]
-    x_verdierp = [punkt1[0], punkt2[0]]
-    y_verdierp = [punkt1[1], punkt2[1]]
-    
     fig,ax = plt.subplots(2,1)
     temp = ax[0]
     trykk = ax[1]
-    
+
+    gjennomsnitts_dato, gjennomsnitts_temp = gjennomsnitts_utregning(date_gokk, temp_gokk, 30)
     temp.plot(date_gokk, temp_gokk, label='Original Temperatur')
-    temp.plot(x_verdierp, y_verdierp,label=f'Temperaturfall maksimal til minimal',color='purple')
-    temp.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+    temp.plot([date_gokk[1128], date_gokk[4570]], [temp_gokk[1128], temp_gokk[4570]],label=f'Temperaturfall maksimal til minimal',color='purple')
+    temp.plot(gjennomsnitts_dato, gjennomsnitts_temp, label=f'Gjennomsnittstemp.', color='orange')
     temp.plot(date_sola, temp_sola, label=f'Temperatur MET', color='green')
-    #plt.xlabel('Tid') 
-    #plt.ylabel('Temperatur (°C)')
-    #temp.title('Temperatur med Glattet Gjennomsnitt')
+    temp.set_ylabel('Temperatur (°C)')
+    temp.set_title('Temperatur')
     temp.legend()
 
-    trykk.plot()
-
-    
-
-    #plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
-    #temp.tight_layout()
+    trykk.plot(date_sola, trykk_sola, label='Lufttrykk MET',color='green')
+    #trykk.plot(date_gokk, trykk_gokk, label='Lufttrykk')
+    #trykk.plot(date_gokk, trykk_absolutt, label='Barometrisk Lufttrykk')
+    trykk.legend()
+    trykk.set_ylabel('Trykk (bar)')
+    trykk.set_title('Trykk')
     plt.show()
-
-
-
-
-    print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
-    print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
-    print('sola,', len(date_sola))
-    print('gokk', len(date_gokk))
+    #print('file1', date_sola[:2], temp_sola[:2], trykk_sola[:2])
+    #print('file2', date_gokk[:2], temp_gokk[:2], trykk_gokk[:2])
+    #print('sola,', len(date_sola))
+    #print('gokk', len(date_gokk))
 
 def convert_date_format(date_str, norsk_format:bool):
     try:
@@ -80,7 +71,7 @@ def open_file1():
                 continue
             date_sola.append(date1)
             temp_sola.append(float(temp1))
-            pressure_sola.append(pressure1)
+            trykk_sola.append(float(pressure1))
 
 def open_file2():
     with open('trykk_og_temperaturlogg_rune_time.csv', mode='r', encoding='utf-8') as file2:
@@ -88,19 +79,20 @@ def open_file2():
         header2 = next(reader2)
         date_index2 = header2.index('Dato og tid')
         temp_index2 = header2.index('Temperatur (gr Celsius)')
-        absolutt_trykk_index = header2.index('Trykk - absolutt trykk maaler (bar)')
+        #absolutt_trykk = header2.index('Trykk - absolutt trykk maaler (bar)')
+        trykk_barometer = header2.index('Trykk - barometer (bar)')
 
         for row in reader2:
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
-            pressure2 = row[absolutt_trykk_index].replace(',', '.')
-            abs_trykk2 = row[absolutt_trykk_index].replace(',','.')
+            pressure2 = row[trykk_barometer].replace(',', '.')
+            #abstrykk2 = row[absolutt_trykk].replace(',', '.')
             date2 = convert_date_format(date2, False)
-            if date2 is None:
-                continue
             date_gokk.append(date2)
             temp_gokk.append(float(temp2))
-            pressure_gokk.append(float(pressure2))
+            #trykk_gokk.append(float(pressure2))
+            #trykk_absolutt.append(float(abstrykk2))
+
 
 
 def gjennomsnitts_utregning(tider:list, temperatur:list, gjennomsnittsverdi:int):
