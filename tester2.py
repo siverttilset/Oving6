@@ -16,13 +16,14 @@ def plot():
     smoothed_dates, smoothed_temps = smooth_temperature(date_gokk, temp_gokk, n)
 
     plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
-    plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
+    plt.plot(smoothed_dates, smoothed_temps, label=f'Gjennomsnittstemperatur', color='orange')
+    plt.plot(date_sola, temp_sola, color='green', label=f'Temperatur MET')
     plt.xlabel('Tid')
     plt.ylabel('Temperatur (°C)')
     plt.title('Temperatur med Glattet Gjennomsnitt')
     plt.legend()
 
-    plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
+    #plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
     plt.tight_layout()
     plt.show()
 
@@ -31,9 +32,12 @@ def plot():
     print('sola,', len(date_sola))
     print('gokk', len(date_gokk))
 
-def convert_date_format(date_str):
+def convert_date_format(date_str, norsk_format:bool):
     try:
-        date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
+        if norsk_format == True:
+            date_time = datetime.strptime(date_str, '%d.%m.%Y %H:%M')
+        else:
+            date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
         return date_time
     except ValueError:
         try:
@@ -51,10 +55,13 @@ def open_file1():
         pressure_index1 = header.index('Lufttrykk i havnivå')
         for row in reader:
             date1 = row[date_index1].strip()
+            date1 = convert_date_format(date1, True)
             temp1 = row[temp_index1].replace(',', '.')
             pressure1 = row[pressure_index1].replace(',', '.')
+            if not temp1:
+                continue
             date_sola.append(date1)
-            temp_sola.append(temp1)
+            temp_sola.append(float(temp1))
             pressure_sola.append(pressure1)
 
 def open_file2():
@@ -68,7 +75,7 @@ def open_file2():
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
             pressure2 = row[pressure_index2].replace(',', '.')
-            date2 = convert_date_format(date2)
+            date2 = convert_date_format(date2, False)
             if date2 is None:
                 continue
             date_gokk.append(date2)
@@ -90,3 +97,5 @@ def smooth_temperature(dates, temperatures, n):
 open_file1()
 open_file2()
 plot()
+
+print(type(date_sola[3]))
