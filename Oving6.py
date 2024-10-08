@@ -85,9 +85,9 @@ def open_file2():
             time_siden_start2=row[time_since_start_index2].strip()
 
             # Convert the date format using the function
-            #date2 = convert_date_format(date2)
-            #if date2 is None:
-            #    continue
+            date2 = convert_date_format(date2)
+            if date2 is None:
+                continue
 
             date_gokk.append(date2)
             temp_gokk.append(float(temp2))
