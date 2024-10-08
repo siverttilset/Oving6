@@ -14,10 +14,15 @@ pressure_gokk = []
 def plot():
     n = 30
     smoothed_dates, smoothed_temps = gjennomsnitts_utregning(date_gokk, temp_gokk, n)
+    punkt1= [date_gokk[1128],temp_gokk[1128]]
+    punkt2= [date_gokk[4570],temp_gokk[4570]]
+    x_verdierp = [punkt1[0], punkt2[0]]
+    y_verdierp = [punkt1[1], punkt2[1]]
 
+    
     plt.plot(date_gokk, temp_gokk, label='Original Temperatur')
-    plt.plot(smoothed_dates, smoothed_temps, label=f'Gjennomsnittstemperatur', color='orange')
-    plt.plot(date_sola, temp_sola, color='green', label=f'Temperatur MET')
+    plt.plot(x_verdierp, y_verdierp,label=f'Temperaturfall maksimal til minimal',color='purple')
+    plt.plot(smoothed_dates, smoothed_temps, label=f'Smoothed Temperatur (n={n})', color='orange')
     plt.xlabel('Tid')
     plt.ylabel('Temperatur (°C)')
     plt.title('Temperatur med Glattet Gjennomsnitt')
@@ -26,6 +31,9 @@ def plot():
     #plt.gcf().autofmt_xdate()  # Roterer tidsstemplene på x-aksen for bedre lesbarhet
     plt.tight_layout()
     plt.show()
+
+
+
 
     print('file1', date_sola[:2], temp_sola[:2], pressure_sola[:2])
     print('file2', date_gokk[:2], temp_gokk[:2], pressure_gokk[:2])
@@ -105,4 +113,3 @@ open_file1()
 open_file2()
 plot()
 
-print(type(date_sola[3]))
