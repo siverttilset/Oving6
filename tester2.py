@@ -1,8 +1,6 @@
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
-import matplotlib
-import matplotlib.ticker
 
 date_sola = []
 temp_sola = []
@@ -13,9 +11,16 @@ temp_gokk = []
 trykk_gokk = []
 
 trykk_absolutt = []
+gyldige_tider_trykk = []
 
 
 def plot():
+    print('file1', date_sola[:2], temp_sola[:2], trykk_sola[:2])
+    print('file2', date_gokk[:2], temp_gokk[:2], trykk_gokk[:2])
+    print(trykk_absolutt[:2])
+    print('sola,', len(date_sola))
+    print('gokk', len(date_gokk))
+
     fig,ax = plt.subplots(2,1)
     temp = ax[0]
     trykk = ax[1]
@@ -30,16 +35,12 @@ def plot():
     temp.legend()
 
     trykk.plot(date_sola, trykk_sola, label='Lufttrykk MET',color='green')
-    #trykk.plot(date_gokk, trykk_gokk, label='Lufttrykk')
-    #trykk.plot(date_gokk, trykk_absolutt, label='Barometrisk Lufttrykk')
+    trykk.plot(gyldige_tider_trykk, trykk_gokk, label='Lufttrykk')
+    trykk.plot(date_gokk, trykk_absolutt, label='Barometrisk Lufttrykk')
     trykk.legend()
     trykk.set_ylabel('Trykk (bar)')
     trykk.set_title('Trykk')
     plt.show()
-    #print('file1', date_sola[:2], temp_sola[:2], trykk_sola[:2])
-    #print('file2', date_gokk[:2], temp_gokk[:2], trykk_gokk[:2])
-    #print('sola,', len(date_sola))
-    #print('gokk', len(date_gokk))
 
 def convert_date_format(date_str, norsk_format:bool):
     try:
@@ -79,19 +80,24 @@ def open_file2():
         header2 = next(reader2)
         date_index2 = header2.index('Dato og tid')
         temp_index2 = header2.index('Temperatur (gr Celsius)')
-        #absolutt_trykk = header2.index('Trykk - absolutt trykk maaler (bar)')
+        absolutt_trykk = header2.index('Trykk - absolutt trykk maaler (bar)')
         trykk_barometer = header2.index('Trykk - barometer (bar)')
 
         for row in reader2:
             date2 = row[date_index2].strip()
             temp2 = row[temp_index2].replace(',', '.')
             pressure2 = row[trykk_barometer].replace(',', '.')
-            #abstrykk2 = row[absolutt_trykk].replace(',', '.')
+            abstrykk2 = row[absolutt_trykk].replace(',', '.')
             date2 = convert_date_format(date2, False)
             date_gokk.append(date2)
             temp_gokk.append(float(temp2))
-            #trykk_gokk.append(float(pressure2))
-            #trykk_absolutt.append(float(abstrykk2))
+            if pressure2:
+                pressure2 = float(pressure2) * 10
+                trykk_gokk.append(float(f'{pressure2:.1f}'))
+                gyldige_tider_trykk.append(date2)
+            if abstrykk2:
+                abstrykk2 = float(abstrykk2) * 10
+                trykk_absolutt.append(float(f'{abstrykk2:.1f}'))
 
 
 
