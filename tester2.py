@@ -16,7 +16,7 @@ gyldige_tider_trykk = []
 
 def plot():
     print('file1', date_sola[:2], temp_sola[:2], trykk_sola[:2])
-    print('file2', date_gokk[:2], temp_gokk[:2], trykk_gokk[:2])
+    print('file2', date_gokk[1250], temp_gokk[:2], trykk_gokk[:2])
     print(trykk_absolutt[:2])
     print('sola,', len(date_sola))
     print('gokk', len(date_gokk))
@@ -34,11 +34,11 @@ def plot():
     temp.set_title('Temperatur')
     temp.legend()
 
-    trykk.plot(date_sola, trykk_sola, label='Lufttrykk MET',color='green')
-    trykk.plot(gyldige_tider_trykk, trykk_gokk, label='Lufttrykk')
-    trykk.plot(date_gokk, trykk_absolutt, label='Barometrisk Lufttrykk')
+    trykk.plot(date_sola, trykk_sola, label='Absolutt trykk MET',color='green')
+    trykk.plot(gyldige_tider_trykk, trykk_gokk, label='Barometrisk lufttrykk')
+    trykk.plot(date_gokk, trykk_absolutt, label='Absolutt trykk')
     trykk.legend()
-    trykk.set_ylabel('Trykk (bar)')
+    trykk.set_ylabel('Trykk (millibar)')
     trykk.set_title('Trykk')
     plt.show()
 
@@ -54,7 +54,11 @@ def convert_date_format(date_str, norsk_format:bool):
             date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
             return date_time
         except ValueError:
-            return None
+            try:
+                date_time = datetime.strptime(date_str, '%m/%d/%Y 00:%M:%S %p')
+                return date_time
+            except:
+                return None
 
 def open_file1():
     with open('temperatur_trykk_met_samme_rune_time_datasett.csv', mode='r', encoding='utf-8') as file1:
