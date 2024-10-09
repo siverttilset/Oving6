@@ -15,18 +15,12 @@ gyldige_tider_trykk = []
 
 
 def plot():
-    print('file1', date_sola[:2], temp_sola[:2], trykk_sola[:2])
-    print('file2', date_gokk[1250], temp_gokk[:2], trykk_gokk[:2])
-    print(trykk_absolutt[:2])
-    print('sola,', len(date_sola))
-    print('gokk', len(date_gokk))
-
     fig,ax = plt.subplots(2,1)
     temp = ax[0]
     trykk = ax[1]
 
     gjennomsnitts_dato, gjennomsnitts_temp = gjennomsnitts_utregning(date_gokk, temp_gokk, 30)
-    temp.plot(date_gokk, temp_gokk, label='Original Temperatur')
+    temp.plot(date_gokk, temp_gokk, label='Temperatur')
     temp.plot([date_gokk[1128], date_gokk[4570]], [temp_gokk[1128], temp_gokk[4570]],label=f'Temperaturfall maksimal til minimal',color='purple')
     temp.plot(gjennomsnitts_dato, gjennomsnitts_temp, label=f'Gjennomsnittstemp.', color='orange')
     temp.plot(date_sola, temp_sola, label=f'Temperatur MET', color='green')
@@ -35,7 +29,7 @@ def plot():
     temp.legend()
 
     trykk.plot(date_sola, trykk_sola, label='Absolutt trykk MET',color='green')
-    trykk.plot(gyldige_tider_trykk, trykk_gokk, label='Barometrisk lufttrykk')
+    trykk.plot(gyldige_tider_trykk, trykk_gokk, label='Barometrisk lufttrykk', color='orange')
     trykk.plot(date_gokk, trykk_absolutt, label='Absolutt trykk')
     trykk.legend()
     trykk.set_ylabel('Trykk (millibar)')
@@ -45,19 +39,19 @@ def plot():
 def convert_date_format(date_str, norsk_format:bool):
     try:
         if norsk_format == True:
-            date_time = datetime.strptime(date_str, '%d.%m.%Y %H:%M')
+            date_time = datetime.strptime(date_str, '%d.%m.%Y %H:%M')  # 24T dag/måned/år
         else:
-            date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')
+            date_time = datetime.strptime(date_str, '%m.%d.%Y %H:%M')  # 24T måned/dag/år
         return date_time
     except ValueError:
         try:
-            date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')
+            date_time = datetime.strptime(date_str, '%m/%d/%Y %I:%M:%S %p')  # AM/PM format
             return date_time
         except ValueError:
             try:
-                date_time = datetime.strptime(date_str, '%m/%d/%Y 00:%M:%S %p')
+                date_time = datetime.strptime(date_str, '%m/%d/%Y 00:%M:%S %p')  # hvis timen er 00 i AM/PM format
                 return date_time
-            except:
+            except ValueError:
                 return None
 
 def open_file1():
