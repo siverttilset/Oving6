@@ -2,6 +2,8 @@ import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
 
+###   gruppe 104
+
 date_sola = []
 temp_sola = []
 trykk_sola = []
@@ -110,9 +112,9 @@ def gjennomsnitts_utregning(tider:list, temperatur:list, gjennomsnittsverdi:int)
                 sum_temp += float(temperatur[x+v])
             gjennomsnitts_liste_temperatur.append(float(f'{sum_temp/((gjennomsnittsverdi*2)+1):.2f}'))
             gyldige_tidspunkter.append(i)
-        else:                                                       ##### Disse 3 linjene kan fjernes hvis vi KUN skal ha med
-            gjennomsnitts_liste_temperatur.append(temperatur[x])    ##### "gyldige" verdier med gjennomsnitt. Da vil de n første
-            gyldige_tidspunkter.append(tider[x])                    ##### og n siste verdiene ikke returneres i det hele tatt
+        else:
+            gjennomsnitts_liste_temperatur.append(temperatur[x])
+            gyldige_tidspunkter.append(tider[x])
 
 
     return gyldige_tidspunkter, gjennomsnitts_liste_temperatur
