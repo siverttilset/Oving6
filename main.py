@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 import csv
 import datetime
@@ -30,7 +29,7 @@ def dato_konverterer(dato_streng:str, norsk_format:bool=False, sekunder:int=-1) 
                 ny_datetime = datetime.datetime.strptime(dato_streng, format)
                 global starttid
                 starttid = ny_datetime + datetime.timedelta(seconds=8)
-                return ny_datetime
+                return starttid
             except ValueError:
                 pass
     if norsk_format:
@@ -137,5 +136,3 @@ les_lang_fil()
 les_sola()
 #debug()
 plot()
-
-print(f'Maksimal temp: {max(data_lang["temperatur"], key=lambda k: data_lang["temperatur"][k])}')
