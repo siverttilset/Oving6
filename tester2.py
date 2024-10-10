@@ -17,9 +17,8 @@ gyldige_tider_trykk = []
 
 
 def plot():
-    fig,ax = plt.subplots(2,1)
-    temp = ax[0]
-    trykk = ax[1]
+    temp = plt.subplot(2,1,1)
+    trykk = plt.subplot(2,1,2)
 
     gjennomsnitts_dato, gjennomsnitts_temp = gjennomsnitts_utregning(date_gokk, temp_gokk, 30)
     temp.plot(date_gokk, temp_gokk, label='Temperatur')
