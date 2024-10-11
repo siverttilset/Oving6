@@ -2,11 +2,11 @@ import matplotlib.pyplot as plt
 import csv
 import datetime
 
-data_sola = {
+data_sola: dict[str, dict[datetime.datetime, float]] = {
     'temperatur':{},
     'trykk':{}
 }
-data_lang = {
+data_lang: dict[str, dict[datetime.datetime, float]] = {
     'temperatur':{},
     'baro_trykk':{},
     'abs_trykk':{}
@@ -48,9 +48,9 @@ def les_sola():
         for row in csv_objekt:
             if len(row) != len(header):
                 continue
-            dato = row[dato_indeks]
-            temp = row[temp_indeks].replace(',', '.')
-            trykk = row[trykk_indeks].replace(',', '.')
+            dato = row[dato_indeks].strip()
+            temp = row[temp_indeks].strip().replace(',', '.')
+            trykk = row[trykk_indeks].strip().replace(',', '.')
             if dato and temp:
                 dato_datetime = dato_konverterer(dato, True)
                 data_sola['temperatur'][dato_datetime] = float(temp)
@@ -69,11 +69,11 @@ def les_lang_fil():
         for row in csv_objekt:
             if len(row) != len(header):
                 continue
-            dato = row[dato_indeks]
-            temp = row[temp_indeks].replace(',', '.')
-            baro_trykk = row[baro_trykk_indeks].replace(',', '.')
-            sekunder = row[sekunder_indeks]
-            abs_trykk = row[abs_trykk_indeks].replace(',','.')
+            dato = row[dato_indeks].strip()
+            temp = row[temp_indeks].strip().replace(',', '.')
+            baro_trykk = row[baro_trykk_indeks].strip().replace(',', '.')
+            sekunder = row[sekunder_indeks].strip()
+            abs_trykk = row[abs_trykk_indeks].strip().replace(',','.')
             if dato and temp:
                 dato_datetime = dato_konverterer(dato, sekunder=float(sekunder))
                 data_lang['temperatur'][dato_datetime] = float(temp)
