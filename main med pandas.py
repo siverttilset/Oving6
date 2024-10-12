@@ -2,11 +2,7 @@ import matplotlib.pyplot as plt
 import pandas
 import datetime
 
-dataframe_lang: pandas.DataFrame = None
-dataframe_sola: pandas.DataFrame = None
-
 def les_sola():
-    global dataframe_sola
     dataframe_sola = pandas.read_csv('temperatur_trykk_met_samme_rune_time_datasett.csv', delimiter=';', decimal=',', parse_dates=[2], dayfirst=True)
     dataframe_sola.rename(columns={
         'Tid(norsk normaltid)': 'dato',
@@ -16,9 +12,9 @@ def les_sola():
     dataframe_sola.drop(index=dataframe_sola.last_valid_index(), inplace=True)
     print(dataframe_sola.info())
     print(dataframe_sola)
+    return dataframe_sola
 
 def les_lang_fil():
-    global dataframe_lang
     dataframe_lang = pandas.read_csv('trykk_og_temperaturlogg_rune_time.csv', delimiter=';', decimal=',')
     dataframe_lang.rename(columns={
         'Dato og tid': 'dato',
@@ -32,6 +28,7 @@ def les_lang_fil():
     dataframe_lang['abs_trykk'] = [trykk * 10 for trykk in dataframe_lang['abs_trykk']]
     print(dataframe_lang.info())
     print(dataframe_lang)
+    return dataframe_lang
 
 def gjennomsnitts_utregning(tider:list, temperatur:list, gjennomsnittsverdi:int):
     gjennomsnitts_liste_temperatur = []
@@ -82,7 +79,7 @@ def plot():
     trykk_graf.set_title('Trykk')
 
     plt.show()
-    
-les_lang_fil()
-les_sola()
+
+dataframe_lang: pandas.DataFrame = les_lang_fil()
+dataframe_sola: pandas.DataFrame = les_sola()
 plot()
