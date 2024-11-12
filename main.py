@@ -3,6 +3,8 @@ import csv
 import datetime
 import math
 
+###   gruppe 104
+
 data_sola: dict[str, dict[datetime.datetime, float]] = {
     'temperatur':{},
     'trykk':{}
