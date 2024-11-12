@@ -20,7 +20,6 @@ data_sinnes: dict[str, dict[datetime.datetime, float]] = {
     'trykk':{}
 }
 
-
 def debug():
     print(f'Sola temp: {list(data_sola["temperatur"].items())[:2]}')
     print(f'Sola trykk: {list(data_sola["trykk"].items())[:2]}\n')
@@ -51,7 +50,6 @@ def dato_konverterer(dato_streng:str, norsk_format:bool=False, sekunder:int=-1) 
         ny_datetime = starttid + datetime.timedelta(seconds=sekunder)
         return ny_datetime
 
-
 def les_fil(fil_sti: str):
     with open(fil_sti, 'r', encoding='UTF-8') as fil:
         csv_objekt = csv.reader(fil, delimiter=';')
@@ -78,24 +76,6 @@ def les_fil(fil_sti: str):
                 riktig_dict['temperatur'][dato_datetime] = float(temp)
                 if trykk:
                     riktig_dict['trykk'][dato_datetime] = float(trykk)
-
-def gjennomsnittlig_forskjell(data1: dict, data2: dict):
-    sum = 0
-    antall = 0
-    lavest = None
-    høyest = None
-    for key,value in data1.items():
-        if not key in data2.keys():
-            continue
-        diff = abs(value - data2[key])
-        sum += diff
-        antall += 1
-        if lavest == None or lavest[1] > diff:
-            lavest = [key, diff]
-        if høyest == None or høyest[1] < diff:
-            høyest = [key, diff]
-    return sum/antall, høyest, lavest
-
 
 def les_lang_fil():
     with open('trykk_og_temperaturlogg_rune_time.csv', 'r', encoding='UTF-8') as fil:
@@ -136,6 +116,22 @@ def gjennomsnitts_utregning(data:dict, gjennomsnittsverdi:int) -> tuple[list, li
         gyldige_tidspunkter.append(dato)
     return gyldige_tidspunkter, gjennomsnitts_liste_temperatur
 
+def gjennomsnittlig_forskjell(data1: dict, data2: dict):
+    sum = 0
+    antall = 0
+    lavest = None
+    høyest = None
+    for key,value in data1.items():
+        if not key in data2.keys():
+            continue
+        diff = abs(value - data2[key])
+        sum += diff
+        antall += 1
+        if lavest == None or lavest[1] > diff:
+            lavest = [key, diff]
+        if høyest == None or høyest[1] < diff:
+            høyest = [key, diff]
+    return sum/antall, høyest, lavest
 
 def plot():
     temp_graf = plt.subplot(3, 2, 1)
@@ -146,7 +142,6 @@ def plot():
 
     gjennomsnitts_tidspunkter, gjennomsnittstemperaturer = gjennomsnitts_utregning(data_lang['temperatur'], 30)
 
-    data_lang['temperatur']
     tempfall_x1 = datetime.datetime(year=2021,month=6,day=11,hour=17,minute=31)
     tempfall_x2 = datetime.datetime(year=2021,month=6,day=12,hour=3,minute=5)
     tempfall_y1 = data_lang['temperatur'][tempfall_x1]
@@ -159,17 +154,9 @@ def plot():
     temp_graf.plot(tempfall_x, tempfall_y, label='Temperaturfall maksimal til minimal', color='purple')
     temp_graf.plot(gjennomsnitts_tidspunkter, gjennomsnittstemperaturer, label='Gjenomsnittstemp.', color='orange')
 
-
-
     temp_graf.set_ylabel('Temperatur (°C)')
     temp_graf.set_title('Temperatur')
     temp_graf.legend()
-
-    differanse = {}
-    for k,v in data_lang['baro_trykk'].items():
-        differanse[k] = abs(v - data_lang['abs_trykk'][k])
-    
-    diff_gjennomsnitts_tidspunkter, diff_gjennomsnitts_trykk = gjennomsnitts_utregning(differanse, 10)
 
     trykk_graf.plot(data_sola['trykk'].keys(), data_sola['trykk'].values(), label='Absolutt trykk Sola')
     trykk_graf.plot(data_lang['abs_trykk'].keys(), data_lang['abs_trykk'].values(), label='Absolutt trykk UiS')
@@ -177,17 +164,20 @@ def plot():
     trykk_graf.plot(data_sauda['trykk'].keys(), data_sauda['trykk'].values(), label='Trykk Sauda')
     trykk_graf.plot(data_sinnes['trykk'].keys(), data_sinnes['trykk'].values(), label='Trykk Sinnes')
 
-
     trykk_graf.legend()
     trykk_graf.set_ylabel('Trykk (millibar)')
     trykk_graf.set_title('Trykk')
 
+    differanse = {}
+    for k,v in data_lang['baro_trykk'].items():
+        differanse[k] = abs(v - data_lang['abs_trykk'][k])
+    
+    diff_gjennomsnitts_tidspunkter, diff_gjennomsnitts_trykk = gjennomsnitts_utregning(differanse, 10)
     diff_graf.plot(diff_gjennomsnitts_tidspunkter, diff_gjennomsnitts_trykk, label='Differanse absolutt og barometrisk trykk UiS')
 
     diff_graf.legend()
     diff_graf.set_ylabel('Differanse trykk')
     diff_graf.set_title('Differanse i trykk')
-
 
     ny_graf.plot(data_sinnes['temperatur'].keys(), data_sinnes['temperatur'].values(), label='Temp Sinnes')
     ny_graf.plot(gjennomsnitts_tidspunkter, gjennomsnittstemperaturer, label='Gjenomsnittstemp. UiS')
@@ -201,7 +191,6 @@ def plot():
     plt.show()
     
 les_lang_fil()
-#les_sola()
 les_fil('temperatur_trykk_sauda_sinnes_samme_tidsperiode.csv')
 les_fil('temperatur_trykk_met_samme_rune_time_datasett.csv')
 #debug()
