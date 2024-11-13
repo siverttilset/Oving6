@@ -142,7 +142,6 @@ def standard_avvik(datasett: list):
     summ = 0
     for i in datasett:
         summ += (i - gjennomsnitt) ** 2
-    
     dev = math.sqrt(1/(len(datasett)-1) * summ)
     return dev
 
@@ -163,14 +162,22 @@ def plot():
     tempfall_x = [tempfall_x1, tempfall_x2]
     tempfall_y = [tempfall_y1, tempfall_y2]
 
+    tempfallsola_x1 = datetime.datetime(year=2021,month=6,day=11,hour=17)
+    tempfallsola_x2 = datetime.datetime(year=2021,month=6,day=12,hour=3)
+    tempfallsola_y1 = data_sola['temperatur'][tempfallsola_x1]
+    tempfallsola_y2 = data_sola['temperatur'][tempfallsola_x2]
+    tempfallsola_x = [tempfallsola_x1, tempfallsola_x2]
+    tempfallsola_y = [tempfallsola_y1, tempfallsola_y2]
+
     temp_graf.plot(data_sola['temperatur'].keys(), data_sola['temperatur'].values(), label='Temperatur Sola', color='green')
     temp_graf.plot(data_lang['temperatur'].keys(), data_lang['temperatur'].values(), label='Temperatur UiS')
     temp_graf.plot(tempfall_x, tempfall_y, label='Temperaturfall maksimal til minimal', color='purple')
+    temp_graf.plot(tempfallsola_x, tempfallsola_y, label='Temp. fall Sola', color='yellow')
     temp_graf.plot(gjennomsnitts_tidspunkter, gjennomsnittstemperaturer, label='Gjenomsnittstemp.', color='orange')
     
     temp_graf.set_ylabel('Temperatur (°C)')
     temp_graf.set_title('Temperatur')
-    temp_graf.legend()
+    temp_graf.legend(loc='upper right')
 
     trykk_graf.plot(data_sola['trykk'].keys(), data_sola['trykk'].values(), label='Absolutt trykk Sola')
     trykk_graf.plot(data_lang['abs_trykk'].keys(), data_lang['abs_trykk'].values(), label='Absolutt trykk UiS')
@@ -207,7 +214,20 @@ def plot():
     stand_div_graf.legend()
     stand_div_graf.set_title('Gjennomsnittstemp UiS m/ standard-avvik')
     stand_div_graf.set_ylabel('Temp °C')
-    
+
+    histogram_data = []
+    for v in data_lang['temperatur'].values():
+        rundet = round(v)
+        histogram_data.append(rundet)
+    for v in data_sola['temperatur'].values():
+        rundet = round(v)
+        histogram_data.append(rundet)
+
+    histogram.hist(histogram_data, label='Antall målinger med temperatur')
+
+    histogram.legend()
+    histogram.set_xlabel('Antall ganger hver temp Sola og UiS')
+
     plt.show()
     
 les_lang_fil()
