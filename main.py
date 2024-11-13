@@ -163,9 +163,17 @@ def plot():
     tempfall_x = [tempfall_x1, tempfall_x2]
     tempfall_y = [tempfall_y1, tempfall_y2]
 
+    tempfallsola_x1 = datetime.datetime(year=2021,month=6,day=11,hour=17)
+    tempfallsola_x2 = datetime.datetime(year=2021,month=6,day=12,hour=3)
+    tempfallsola_y1 = data_sola['temperatur'][tempfallsola_x1]
+    tempfallsola_y2 = data_sola['temperatur'][tempfallsola_x2]
+    tempfallsola_x = [tempfallsola_x1, tempfallsola_x2]
+    tempfallsola_y = [tempfallsola_y1, tempfallsola_y2]
+
     temp_graf.plot(data_sola['temperatur'].keys(), data_sola['temperatur'].values(), label='Temperatur Sola', color='green')
     temp_graf.plot(data_lang['temperatur'].keys(), data_lang['temperatur'].values(), label='Temperatur UiS')
     temp_graf.plot(tempfall_x, tempfall_y, label='Temperaturfall maksimal til minimal', color='purple')
+    temp_graf.plot(tempfallsola_x, tempfallsola_y, label='Temp. fall Sola', color='yellow')
     temp_graf.plot(gjennomsnitts_tidspunkter, gjennomsnittstemperaturer, label='Gjenomsnittstemp.', color='orange')
     
     temp_graf.set_ylabel('Temperatur (°C)')
