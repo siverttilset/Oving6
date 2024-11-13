@@ -223,10 +223,11 @@ def plot():
         rundet = round(v)
         histogram_data.append(rundet)
 
-    histogram.hist(histogram_data, label='Antall målinger med temperatur')
+    histogram.hist(histogram_data, label='Antall målinger hver grad')
 
     histogram.legend()
-    histogram.set_xlabel('Antall ganger hver temp Sola og UiS')
+    histogram.set_xlabel('Temperatur')
+    histogram.set_ylabel('Antall målinger, Sola og UiS')
 
     plt.show()
     
